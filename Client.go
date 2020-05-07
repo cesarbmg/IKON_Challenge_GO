@@ -7,7 +7,7 @@ import (
 	"context"
 	"log"
 	"google.golang.org/grpc"	
-	"github.com/cesarbmg/IKON_Challenge_GO/gRPC"
+	"github.com/cesarbmg/IKON_Challenge_GO/gRPC/Protocol"
 )
 
 type device struct {  

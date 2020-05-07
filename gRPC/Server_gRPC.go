@@ -10,7 +10,7 @@ import (
   	"encoding/json"
     "net/http"
 	"google.golang.org/grpc"
-	"github.com/cesarbmg/IKON_Challenge_GO/gRPC"
+	"github.com/cesarbmg/IKON_Challenge_GO/gRPC/Protocol"
 )
 
 var sURLgRPC string = "0.0.0.0"
