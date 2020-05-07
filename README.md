@@ -25,6 +25,6 @@ Example Sintaxis:
 
 The app execute 3 files "go run" in same time
 
-- go run Server_REST.go
-- go run Server_gRPC.go
+- go run REST\Server_REST.go
+- go run gRPC\Server_gRPC.go
 - go run Client.go

@@ -13,17 +13,17 @@ import (
 	"github.com/cesarbmg/IKON_Challenge_GO/gRPC"
 )
 
-var sURL string = "0.0.0.0"
-var sPort string = "8084"
-var address string =  sURL + ":" + sPort
+var sURLgRPC string = "0.0.0.0"
+var sPortgRPC string = "8084"
+var addressgRPC string =  sURLgRPC + ":" + sPortgRPC
 
-type device struct {  
+type devicegRPC struct {  
     Capacity string `json:"Capacity"`
     Foreground string `json:"Foreground"`
     Background string `json:"Background"`
 }
 
-func rEST(d device) string{
+func rEST(d devicegRPC) string{
 	url:="http://localhost:8083"
 
 	var jsonData []byte
@@ -65,7 +65,7 @@ type server struct {
 
 func (*server) Device(ctx context.Context, request *Protocol.DeviceRequest) (*Protocol.DeviceResponse, error) {
 
-	var d device
+	var d devicegRPC
 	d.Capacity = request.Capacity
 	d.Foreground = request.Foreground
 	d.Background = request.Background
@@ -78,17 +78,17 @@ func (*server) Device(ctx context.Context, request *Protocol.DeviceRequest) (*Pr
 		Response: "gRPC => " + sResponse + "",
 	}
 
-	fmt.Println("Server gRPC is listening on " + address + "...")
+	fmt.Println("Server gRPC is listening on " + addressgRPC + "...")
 
 	return response, nil
 }
 
 func main() {
-	lis, err := net.Listen("tcp", address)
+	lis, err := net.Listen("tcp", addressgRPC)
 	if err != nil {
 		log.Fatalf("Error %v", err)
 	}	
-	fmt.Println("Server gRPC is listening on " + address + "...")
+	fmt.Println("Server gRPC is listening on " + addressgRPC + "...")
 	s := grpc.NewServer()	
 	Protocol.RegisterDeviceServiceServer(s, &server{})
 	s.Serve(lis)

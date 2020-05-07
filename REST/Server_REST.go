@@ -11,11 +11,11 @@ import (
 	"io/ioutil"
 )
 
-var sURL string = "0.0.0.0"
-var sPort string = "8083"
-var address string =  sURL + ":" + sPort
+var sURLREST string = "0.0.0.0"
+var sPortREST string = "8083"
+var addressREST string =  sURLREST + ":" + sPortREST
 
-type device struct {  
+type deviceREST struct {  
     Capacity string `json:"Capacity"`
     Foreground string `json:"Foreground"`
     Background string `json:"Background"`
@@ -123,7 +123,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     case "POST":
         w.WriteHeader(http.StatusOK)
    
-		var d device
+		var d deviceREST
 
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -173,15 +173,14 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte(`{"message": "not found"}`))
 	}
 	
-	fmt.Println("Server REST is listening on " + address + "...")
+	fmt.Println("Server REST is listening on " + addressREST + "...")
 }
 
 func main() {
-	address := "0.0.0.0:8083"
 	s := &server{}	
 	http.Handle("/", s)	
-	fmt.Println("Server REST is listening on " + address + "...")	
-	err := http.ListenAndServe(address, nil)
+	fmt.Println("Server REST is listening on " + addressREST + "...")	
+	err := http.ListenAndServe(addressREST, nil)
 	if err != nil {
 		log.Fatalf("Error %v", err)
 	}
