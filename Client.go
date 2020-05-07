@@ -6,12 +6,8 @@ import (
 	"os"
 	"context"
 	"log"
-	"io/ioutil"
-	"bytes"
-  	"encoding/json"
-    "net/http"
 	"google.golang.org/grpc"	
-	"src/github.com/cesarbmg/IKON_Challenge_GO/gRPC"
+	"github.com/cesarbmg/IKON_Challenge_GO/gRPC"
 )
 
 type device struct {  
@@ -20,43 +16,23 @@ type device struct {
     Background string `json:"Background"`
 }
 
-func gRPC(d device){
+func gRPC(d device) string{
 	opts := grpc.WithInsecure()
-	cc, err := grpc.Dial("localhost:8083", opts)
+	cc, err := grpc.Dial("localhost:8084", opts)
+
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error in open gRPC: %s", err)
 	}
+
 	defer cc.Close()
+
 	client := Protocol.NewDeviceServiceClient(cc)
 	request := &Protocol.DeviceRequest{Capacity: d.Capacity, Foreground: d.Foreground, Background: d.Background }
 	resp, _ := client.Device(context.Background(), request)
+
 	fmt.Println(resp.Response)
-}
 
-func rEST(d device){
-	url:="http://localhost:8084"
-
-	var jsonData []byte
-	jsonData, err := json.Marshal(d)
-	if err != nil {
-		log.Println(err)
-	}
-
-    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
-    req.Header.Set("Content-Type", "application/json")
-
-    client := &http.Client{}
-	resp, err := client.Do(req)
-	
-    if err != nil {
-		log.Fatal(err)
-    }else{
-    	defer resp.Body.Close()
-		//debug
-    	//fmt.Println("response Status:", resp.Status)
-		data, _ := ioutil.ReadAll(resp.Body)		
-		fmt.Println(string(data))
-	}
+	return resp.Response;
 }
 
 func main() {
@@ -84,8 +60,10 @@ func main() {
 	}
 	
 	fmt.Println("OUTPUT...")
-	var k = len(fileTextLines)
 
+	var sResult []string
+
+	var k = len(fileTextLines)
 	for i := 0; i < k; i++ {
 		var d device
 		d.Capacity = fileTextLines[i]
@@ -94,7 +72,25 @@ func main() {
 		i++
 		d.Background = fileTextLines[i]		
 		
-		gRPC(d)
-		rEST(d)
+		sResult = append(sResult, gRPC(d))
+		//sResult = append(sResult, rEST(d))
 	}
+
+	f, err1 := os.Create("challenge.out")
+    if err1 != nil {
+        log.Fatalf("Unable to create file output: %v", err1)
+        f.Close()
+        return
+    }
+
+	for _, s := range sResult {
+        fmt.Fprintln(f, s)
+	}
+	
+    err = f.Close()
+    if err != nil {
+		log.Fatalf("Unable to close file output: %v", err)
+        return
+	}
+	
 }

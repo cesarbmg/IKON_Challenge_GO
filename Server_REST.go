@@ -11,6 +11,10 @@ import (
 	"io/ioutil"
 )
 
+var sURL string = "0.0.0.0"
+var sPort string = "8083"
+var address string =  sURL + ":" + sPort
+
 type device struct {  
     Capacity string `json:"Capacity"`
     Foreground string `json:"Foreground"`
@@ -168,10 +172,12 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusNotFound)
         w.Write([]byte(`{"message": "not found"}`))
 	}
+	
+	fmt.Println("Server REST is listening on " + address + "...")
 }
 
 func main() {
-	address := "0.0.0.0:8084"
+	address := "0.0.0.0:8083"
 	s := &server{}	
 	http.Handle("/", s)	
 	fmt.Println("Server REST is listening on " + address + "...")	
