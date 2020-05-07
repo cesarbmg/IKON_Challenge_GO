@@ -9,8 +9,7 @@ import (
 	"strings"
 	"strconv"
 	"google.golang.org/grpc"
-	// "src/github.com/IKON_Challenge/gRPC"
-	"Services"
+	"src/github.com/cesarbmg/IKON_Challenge_GO/gRPC"
 )
 
 //Estructura para los arreglos de tares Foreground y Background

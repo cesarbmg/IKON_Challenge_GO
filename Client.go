@@ -10,9 +10,8 @@ import (
 	"bytes"
   	"encoding/json"
     "net/http"
-	"google.golang.org/grpc"
-	"Services"
-	// "src/github.com/IKON_Challenge/gRPC"
+	"google.golang.org/grpc"	
+	"src/github.com/cesarbmg/IKON_Challenge_GO/gRPC"
 )
 
 type device struct {  
