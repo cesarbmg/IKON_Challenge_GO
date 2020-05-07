@@ -16,9 +16,10 @@ The app need files of input
 - challenge.in
 
 Example Sintaxis:
-20                          // First Line is Capacity of Device
-(1, 7), (2, 14), (3, 8)     // Second Line is Tasks of Foreground: (IdTask, Resources)
-(1, 14), (2, 5), (3, 10)    // Third Line is Tasks of Background: (IdTask, Resources)
+
+- 20                          // First Line is Capacity of Device
+- (1, 7), (2, 14), (3, 8)     // Second Line is Tasks of Foreground: (IdTask, Resources)
+- (1, 14), (2, 5), (3, 10)    // Third Line is Tasks of Background: (IdTask, Resources)
 
 ## Command run
 
