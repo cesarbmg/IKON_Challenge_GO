@@ -6,8 +6,8 @@ Project Ikon_Challenge with GO
 
 The app need import packages with "go get"
 
-- go get -u google.golang.org/grpc
-- go get -u github.com/cesarbmg/IKON_Challenge_GO
+- go install google.golang.org/grpc@latest
+- go install github.com/cesarbmg/IKON_Challenge_GO/grpc@latest
 
 ## External files
 

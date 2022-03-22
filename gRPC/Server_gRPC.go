@@ -1,30 +1,31 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
-	"io/ioutil"
-	"bytes"
-  	"encoding/json"
-    "net/http"
-	"google.golang.org/grpc"
+	"net/http"
+
 	"github.com/cesarbmg/IKON_Challenge_GO/gRPC/Protocol"
+	"google.golang.org/grpc"
 )
 
 var sURLgRPC string = "0.0.0.0"
 var sPortgRPC string = "8084"
-var addressgRPC string =  sURLgRPC + ":" + sPortgRPC
+var addressgRPC string = sURLgRPC + ":" + sPortgRPC
 
-type devicegRPC struct {  
-    Capacity string `json:"Capacity"`
-    Foreground string `json:"Foreground"`
-    Background string `json:"Background"`
+type devicegRPC struct {
+	Capacity   string `json:"Capacity"`
+	Foreground string `json:"Foreground"`
+	Background string `json:"Background"`
 }
 
-func rEST(d devicegRPC) string{
-	url:="http://localhost:8083"
+func rEST(d devicegRPC) string {
+	url := "http://localhost:8083"
 
 	var jsonData []byte
 	jsonData, err := json.Marshal(d)
@@ -33,34 +34,33 @@ func rEST(d devicegRPC) string{
 		log.Fatalf("error in convert json client REST: %s", err)
 	}
 
-    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
-    req.Header.Set("Content-Type", "application/json")
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	req.Header.Set("Content-Type", "application/json")
 
-    client := &http.Client{}
+	client := &http.Client{}
 	resp, err := client.Do(req)
-	
-    if err != nil {
-		log.Fatalf("error in SendPOST client REST: %s",err)
-    }else{
+
+	if err != nil {
+		log.Fatalf("error in SendPOST client REST: %s", err)
+	} else {
 		defer resp.Body.Close()
-		
+
 		//debug
 		//fmt.Println("response Status:", resp.Status)
-		
-		data, _ := ioutil.ReadAll(resp.Body)	
 
-		//debug	
+		data, _ := ioutil.ReadAll(resp.Body)
+
+		//debug
 		//fmt.Println(string(data))
-		
-		return string(data);
-	}	
+
+		return string(data)
+	}
 
 	return ""
 }
 
 //Estrcutura del server
 type server struct {
-
 }
 
 func (*server) Device(ctx context.Context, request *Protocol.DeviceRequest) (*Protocol.DeviceResponse, error) {
@@ -87,9 +87,9 @@ func main() {
 	lis, err := net.Listen("tcp", addressgRPC)
 	if err != nil {
 		log.Fatalf("Error %v", err)
-	}	
+	}
 	fmt.Println("Server gRPC is listening on " + addressgRPC + "...")
-	s := grpc.NewServer()	
+	s := grpc.NewServer()
 	Protocol.RegisterDeviceServiceServer(s, &server{})
 	s.Serve(lis)
 }
